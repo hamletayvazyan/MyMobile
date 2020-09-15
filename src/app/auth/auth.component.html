@@ -1,3 +1,28 @@
-<p>
-  auth works!
-</p>
+<ion-header translucent>
+    <ion-toolbar>
+        <ion-title class="ion-text-center">please sign in</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+    <form [formGroup]="authForm" (ngSubmit)="submit()">
+        <ion-list lines="full" class="ion-no-margin ion-no-padding">
+            <ion-item>
+                <ion-label position="stacked">Email
+                    <ion-text color="danger">*</ion-text>
+                </ion-label>
+                <ion-input required type="email" formControlName="email"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label position="stacked">Password
+                    <ion-text color="danger">*</ion-text>
+                </ion-label>
+                <ion-input required type="password" formControlName="password"></ion-input>
+            </ion-item>
+
+            <div class="ion-padding">
+                <ion-button expand="block" type="submit" class="ion-no-margin">Create account</ion-button>
+            </div>
+        </ion-list>
+    </form>
+</ion-content>
