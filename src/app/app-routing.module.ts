@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import {HomeGuard} from "./home/home.guard";
+import {HomeGuard} from "./home/_guards/home.guard";
 
 const routes: Routes = [
   {

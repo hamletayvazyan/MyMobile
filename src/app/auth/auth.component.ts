@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AlertController, LoadingController} from '@ionic/angular';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Subject} from "rxjs";
-import {AuthService} from "./auth.service";
+import {AuthService} from "./_services/auth.service";
 import {UserStorageService} from "../_services/user-storage.service";
 import {Router} from "@angular/router";
 
