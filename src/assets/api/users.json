@@ -1,0 +1,20 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "first_name": "Ionic",
+      "last_name": "App",
+      "email": "ionic@app.com",
+      "token": "ozVZbcGNlLnIpPQx1QSvdNdYl8EcPDIUSp3rcs3rdBIXNGGMQUIWvNGLeJmEAsMRCH71VWyYcy8DZUeO",
+      "password": "ionic"
+    },
+    {
+      "id": 2,
+      "first_name": "Super",
+      "last_name": "Admin",
+      "email": "super@admin.com",
+      "token": "SA6214Mhs7B4xqhxvKwBETFL7ld2dTkIOpwmeOPi4ztVF6XblVDoZtw8pPoWUY3KMzvTPFGKmhVvYMCC",
+      "password": "superAdmin"
+    }
+  ]
+}
