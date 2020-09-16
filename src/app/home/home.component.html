@@ -5,6 +5,9 @@
                 <ion-col class="ion-text-left ion-align-self-center">
                     Welcome {{userInfo.first_name}}
                 </ion-col>
+                <ion-col class="ion-text-center ion-align-self-center" (click)="presentPopover($event)">
+                    <ion-icon name="search-outline"></ion-icon>
+                </ion-col>
                 <ion-col class="ion-text-right">
                     <ion-button (click)="logout()" color="medium" shape="round" fill="outline" size="small">
                         logout
@@ -22,9 +25,23 @@
         </ion-toolbar>
     </ion-header>
 
-    <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer"
-                               href="https://ionicframework.com/docs/components">UI Components</a></p>
-    </div>
+    <ion-content fullscreen>
+        <ion-row>
+            <ion-col *ngFor="let photo of photos" size="4">
+                <ion-card *ngIf="photo.url_c">
+                    <img [src]="photo.url_c"/>
+                    <ion-card-header>
+                        <ion-card-subtitle>{{photo.ownername}}</ion-card-subtitle>
+                        <ion-card-title>{{photo.title}}</ion-card-title>
+                    </ion-card-header>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+        <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+            <ion-infinite-scroll-content
+                    loadingSpinner="bubbles"
+                    loadingText="Loading more data...">
+            </ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+    </ion-content>
 </ion-content>
