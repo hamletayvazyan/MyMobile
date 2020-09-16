@@ -11,6 +11,8 @@ import {AppRoutingModule} from './app-routing.module';
 import {AuthModule} from "./auth/auth.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
+import {environment} from "../environments/environment";
+import {NgxsModule} from "@ngxs/store";
 
 @NgModule({
     declarations: [AppComponent],
@@ -21,6 +23,9 @@ import {HttpClientModule} from "@angular/common/http";
         FormsModule,
         ReactiveFormsModule,
         IonicModule.forRoot(),
+        NgxsModule.forRoot([], {
+            developmentMode: !environment.production
+        }),
         AuthModule,
         AppRoutingModule
     ],

@@ -1,10 +1,11 @@
 <ion-header translucent>
     <ion-toolbar>
-        <ion-title class="ion-text-center">please sign in</ion-title>
+        <ion-title class="ion-text-center">Sign In</ion-title>
     </ion-toolbar>
 </ion-header>
-<ion-content fullscreen>
-    <form [formGroup]="authForm" (ngSubmit)="submit()">
+<ion-content [fullscreen]="true" >
+    <form [formGroup]="authForm" (ngSubmit)="submit()"
+          class="centered">
         <ion-list lines="full" class="ion-no-margin ion-no-padding">
             <ion-item>
                 <ion-label position="stacked">Email
@@ -21,7 +22,7 @@
             </ion-item>
 
             <div class="ion-padding">
-                <ion-button expand="block" type="submit" class="ion-no-margin">Create account</ion-button>
+                <ion-button expand="block" type="submit" class="ion-no-margin">Sign In</ion-button>
             </div>
         </ion-list>
     </form>

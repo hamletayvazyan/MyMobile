@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpResponse} from "@angular/common/http";
-import {HttpIResponse, User, UserLoginRequest, UserLoginResponse} from "../_interfaces/user";
-import {bindCallback, Observable, of} from "rxjs";
+import {HttpClient} from "@angular/common/http";
+import {HttpIResponse, UserLoginRequest, UserLoginResponse} from "../_interfaces/user";
+import {Observable} from "rxjs";
 import {map} from "rxjs/operators";
 
 @Injectable({
