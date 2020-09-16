@@ -6,7 +6,7 @@ import {UserStorageService} from "../_services/user-storage.service";
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class HomeGuard implements CanActivate {
   constructor(
       private router: Router,
       private userStorageService: UserStorageService,
