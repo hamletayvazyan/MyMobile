@@ -29,7 +29,7 @@
         <ion-row>
             <ion-col *ngFor="let photo of photos" size="4">
                 <ion-card *ngIf="photo.url_c">
-                    <img [src]="photo.url_c"/>
+                    <img [src]="photo.url_c" class="w-100"/>
                     <ion-card-header>
                         <ion-card-subtitle>{{photo.ownername}}</ion-card-subtitle>
                         <ion-card-title>{{photo.title}}</ion-card-title>

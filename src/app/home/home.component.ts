@@ -6,6 +6,7 @@ import {HomeService} from "./_services/home.service";
 import {LoadingController, PopoverController} from "@ionic/angular";
 import { Photo, Photos} from "./_interfaces/flickr_photos";
 import {SearchComponent} from "./search/search.component";
+import {tap} from "rxjs/operators";
 
 @Component({
     selector: 'app-home',
@@ -30,7 +31,7 @@ export class HomeComponent {
                 private route: ActivatedRoute,
                 private router: Router) {
         this.userInfo = userStorageService.getUserAuthInfo;
-        this.getPhotos(true)
+        this.getPhotos(true).then()
     }
     async loadData(event) {
         if (this.loadedLn == this.total) {
@@ -53,7 +54,14 @@ export class HomeComponent {
                 this.search = params.search ? params.search : 'lamborghini'
             });
         }
-        this.homeService.searchPhotos(this.search, this.page, this.perPage).subscribe((resp) => {
+        this.homeService.searchPhotos(this.search, this.page, this.perPage)
+            .pipe(
+                tap((resp) => {
+                    resp.photos.photo = resp.photos.photo.filter(i => i.url_c);
+                    return resp;
+                })
+            )
+            .subscribe((resp) => {
             this.flickrPhotos = resp.photos;
             this.loadedLn = resp.photos.perpage;
             this.total = +resp.photos.total;
