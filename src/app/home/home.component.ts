@@ -1,12 +1,14 @@
-import {Component, ViewChild} from '@angular/core';
-import {UserStorageService} from "../_services/user-storage.service";
-import {ActivatedRoute, Router} from "@angular/router";
-import {User} from "../_interfaces/user";
-import {HomeService} from "./_services/home.service";
+import {Component} from '@angular/core';
 import {LoadingController, PopoverController} from "@ionic/angular";
-import { Photo, Photos} from "./_interfaces/flickr_photos";
+import {ActivatedRoute, Router} from "@angular/router";
+
+import {UserStorageService} from "../_services/user-storage.service";
+import {User} from "../_interfaces/user";
+import {Photos, RequestParams} from "./_interfaces/flickr_photos";
 import {SearchComponent} from "./search/search.component";
-import {tap} from "rxjs/operators";
+import {Store} from "@ngxs/store";
+import {SearchFlickr, LoadFlickr} from "./_actions/flickr.action";
+import {Subscription} from "rxjs";
 
 @Component({
     selector: 'app-home',
@@ -16,31 +18,34 @@ import {tap} from "rxjs/operators";
 export class HomeComponent {
     public userInfo: User;
     public flickrPhotos: Photos;
-    public photos: Photo[];
+
+    paramsSubscription : Subscription;
+
     public loadedLn: number = 0;
-    public search: string;
-    public page: number = 1;
-    public perPage: number = 30;
+
+    private reqParams: RequestParams = {
+        text: '',
+        page: 1,
+        perPage: 5
+    }
     public total: number;
-    public list = document.getElementById('list');
 
     constructor(private userStorageService: UserStorageService,
                 public loadingController: LoadingController,
                 public popoverController: PopoverController,
-                private homeService: HomeService,
+                private store: Store,
                 private route: ActivatedRoute,
                 private router: Router) {
         this.userInfo = userStorageService.getUserAuthInfo;
-        this.getPhotos(true).then()
+        this.getPhotos(true)
     }
     async loadData(event) {
         if (this.loadedLn == this.total) {
             event.target.disabled = true;
         }
-        this.page++;
+        this.reqParams.page++;
         await this.getPhotos(false)
         await event.target.complete();
-
     }
     logout() {
         this.userStorageService.removeFromLocalStorageUserInfo()
@@ -50,31 +55,29 @@ export class HomeComponent {
     async getPhotos(isNew: boolean) {
         if (isNew){
             this.presentLoading().then(() => {});
-            await this.route.queryParams.subscribe(params => {
-                this.search = params.search ? params.search : 'lamborghini'
+            await this.getQueryParams();
+            this.store.dispatch(new SearchFlickr(this.reqParams)).subscribe((resp) => {
+                this.flickrPhotos = resp.photos;
+                this.loadedLn = this.flickrPhotos.photo.length;
+                this.total = +this.flickrPhotos.total;
+                this.dismissLoading().then(() => {});
+            });
+        } else {
+            this.store.dispatch(new LoadFlickr(this.reqParams)).subscribe((resp) => {
+                this.flickrPhotos = resp.photos;
+                this.loadedLn = this.flickrPhotos.photo.length;
+                this.total = +this.flickrPhotos.total;
             });
         }
-        this.homeService.searchPhotos(this.search, this.page, this.perPage)
-            .pipe(
-                tap((resp) => {
-                    resp.photos.photo = resp.photos.photo.filter(i => i.url_c);
-                    return resp;
-                })
-            )
-            .subscribe((resp) => {
-            this.flickrPhotos = resp.photos;
-            this.loadedLn = resp.photos.perpage;
-            this.total = +resp.photos.total;
-            if (isNew){
-                this.photos = resp.photos.photo;
-                this.dismissLoading().then(() => {});
-            } else {
-                resp.photos.photo.map(i => {
-                    this.photos.push(i)
-                })
-            }
-        })
+    }
 
+    getQueryParams() {
+        this.paramsSubscription = this.route.queryParams.subscribe(params => {
+            this.reqParams.text = params.search ? params.search : 'lamborghini'
+        });
+        setTimeout(() => {
+            this.paramsSubscription.unsubscribe()
+        }, 150)
     }
 
     async presentLoading() {
@@ -85,7 +88,7 @@ export class HomeComponent {
     }
 
     async dismissLoading() {
-        const loading = await this.loadingController.dismiss({});
+        await this.loadingController.dismiss({});
     }
 
     async presentPopover(ev: any) {
@@ -93,11 +96,15 @@ export class HomeComponent {
             component: SearchComponent,
             event: ev,
             translucent: true,
-            componentProps: {search: this.search},
+            componentProps: {search: this.reqParams.text},
         })
         await popover.present();
         await popover.onDidDismiss().then(() => {
-            this.getPhotos(true)
+            this.route.queryParams.subscribe(params => {
+                if (params.search && this.reqParams.text !== params.search){
+                    this.getPhotos(true)
+                }
+            });
         })
     }
 

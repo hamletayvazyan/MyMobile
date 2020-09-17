@@ -1,14 +1,14 @@
-export interface Flickr_photos {
+export interface Flickr {
     stat: string;
     photos: Photos
 }
 
 export interface Photos {
     page: number;
-    pages: number;
+    pages?: number;
     perpage: number;
     photo: Photo[];
-    total: string
+    total?: string
 }
 
 export interface Photo {
@@ -25,4 +25,10 @@ export interface Photo {
     title: string;
     url_c: string;
     width_c: number;
+}
+
+export interface RequestParams {
+    text: string;
+    page: number;
+    perPage: number;
 }

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
@@ -6,7 +6,7 @@ import {ActivatedRoute, Router} from "@angular/router";
     templateUrl: './search.component.html',
     styleUrls: ['./search.component.scss'],
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
 
     @Input() search: string;
 
@@ -19,5 +19,9 @@ export class SearchComponent implements OnInit {
 
     searching($value) {
        this.router.navigate(['/'], { queryParams: { search: $value }} );
+    }
+
+    ngOnDestroy() {
+        this.searching(this.search)
     }
 }
