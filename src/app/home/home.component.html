@@ -3,11 +3,9 @@
         <ion-title class="flex ion-align-items-center ion-justify-content-between">
             <ion-row>
                 <ion-col class="ion-text-left ion-align-self-center">
-                    Welcome {{userInfo.first_name}}
+                    <ion-icon name="search-outline"></ion-icon> {{reqParams.text}}
                 </ion-col>
-                <ion-col class="ion-text-center ion-align-self-center" (click)="presentPopover($event)">
-                    <ion-icon name="search-outline"></ion-icon>
-                </ion-col>
+
                 <ion-col class="ion-text-right">
                     <ion-button (click)="logout()" color="medium" shape="round" fill="outline" size="small">
                         logout
@@ -21,6 +19,9 @@
 <ion-content [fullscreen]="true">
 
     <ion-content fullscreen *ngIf="flickrPhotos">
+        <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+            <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
         <ion-row>
             <ion-col *ngFor="let photo of flickrPhotos.photo" size="12">
                 <ion-card *ngIf="photo.url_c">
@@ -40,3 +41,24 @@
         </ion-infinite-scroll>
     </ion-content>
 </ion-content>
+<ion-footer>
+    <ion-toolbar>
+        <ion-title class="flex ion-align-items-center ion-justify-content-between">
+            <ion-row>
+                <ion-col class="ion-text-left ion-align-self-center">
+                    <ion-button (click)="getPhotos(true)" color="medium" shape="round" fill="outline" size="small">
+                        refresh
+                    </ion-button>
+                </ion-col>
+                <ion-col class="ion-text-center ion-align-self-center">
+                    <ion-icon name="search-outline"  (click)="presentPopover($event)"></ion-icon>
+                </ion-col>
+                <ion-col class="ion-text-right">
+                    <ion-button (click)="getPhotos(false)" color="medium" shape="round" fill="outline" size="small">
+                        load more
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-title>
+    </ion-toolbar>
+</ion-footer>

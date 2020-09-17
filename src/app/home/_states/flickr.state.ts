@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 
 import {State, Action, StateContext} from '@ngxs/store';
-import {Flickr, Photos, RequestParams} from "../_interfaces/flickr_photos";
+import {Photos} from "../_interfaces/flickr_photos";
 
 import {SearchFlickr, LoadFlickr} from "../_actions/flickr.action";
 

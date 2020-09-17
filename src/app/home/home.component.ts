@@ -1,14 +1,13 @@
 import {Component} from '@angular/core';
 import {LoadingController, PopoverController} from "@ionic/angular";
 import {ActivatedRoute, Router} from "@angular/router";
+import {Store} from "@ngxs/store";
 
 import {UserStorageService} from "../_services/user-storage.service";
 import {User} from "../_interfaces/user";
 import {Photos, RequestParams} from "./_interfaces/flickr_photos";
 import {SearchComponent} from "./search/search.component";
-import {Store} from "@ngxs/store";
 import {SearchFlickr, LoadFlickr} from "./_actions/flickr.action";
-import {Subscription} from "rxjs";
 
 @Component({
     selector: 'app-home',
@@ -19,16 +18,16 @@ export class HomeComponent {
     public userInfo: User;
     public flickrPhotos: Photos;
 
-    paramsSubscription : Subscription;
+    private searchValues = ['lamborghini', 'ferrari', 'audi', 'nature', 'qwerty', 'AI', 'IT']
 
-    public loadedLn: number = 0;
+    private loadedLn: number = 0;
 
-    private reqParams: RequestParams = {
+    public reqParams: RequestParams = {
         text: '',
         page: 1,
         perPage: 5
     }
-    public total: number;
+    private total: number;
 
     constructor(private userStorageService: UserStorageService,
                 public loadingController: LoadingController,
@@ -72,12 +71,9 @@ export class HomeComponent {
     }
 
     getQueryParams() {
-        this.paramsSubscription = this.route.queryParams.subscribe(params => {
-            this.reqParams.text = params.search ? params.search : 'lamborghini'
+        this.route.queryParams.subscribe(params => {
+            this.reqParams.text = params.search ? params.search : this.getRandomValue()
         });
-        setTimeout(() => {
-            this.paramsSubscription.unsubscribe()
-        }, 150)
     }
 
     async presentLoading() {
@@ -108,4 +104,14 @@ export class HomeComponent {
         })
     }
 
+    doRefresh(event) {
+        this.getPhotos(true).then(() => {
+            event.target.complete();
+        })
+    }
+
+    private getRandomValue():string {
+        const random = Math.floor(Math.random() * this.searchValues.length);
+        return this.searchValues[random]
+    }
 }

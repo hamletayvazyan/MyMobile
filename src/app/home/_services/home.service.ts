@@ -3,17 +3,26 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Flickr, RequestParams} from "../_interfaces/flickr_photos";
 
+import {environment} from '../../../environments/environment'
+
 /*
 * url to get api_key => https://www.flickr.com/services/api/explore/flickr.photos.search
 *
-* type something  example: qwerty in TEXT field and click the --> Call Method.. button
+* type something in TEXT field ex: qwerty and click the --> Call Method.. button
 *
 * after that you will get some URL where you have an api_key
 *
 * copy that key and set api_key variable value
+*
+* in /src/environment/environment.ts
+*
+* after clone use npm i
+*
+* ionic serve
 * */
-const api_key = '9369bd0daf6b359bd2205c952ccd7f99';
-const apiUrl = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${api_key}`;
+const api_key = environment.api_key;
+const api_point = environment.api_point;
+const apiUrl = `${api_point}${api_key}`;
 
 @Injectable({
   providedIn: 'root'
